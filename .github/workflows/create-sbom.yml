@@ -1,7 +1,6 @@
 name: Npm
 
-on:
-  workflow_call:
+on: push
 
 permissions:
   contents: read
