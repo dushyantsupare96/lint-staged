@@ -17,8 +17,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install SBOM generator
-        run: npm install --save-dev cyclonedx-node-npm
+      - name: Install CycloneDX SBOM generator
+        run: npm install --save-dev @cyclonedx/cyclonedx-npm
 
       - name: Generate CycloneDX SBOM (JSON)
-        run: npx cyclonedx-node-npm --output sbom.json --json
+        run: npx @cyclonedx/cyclonedx-npm --package.json
