@@ -1,46 +1,24 @@
-name: Npm
+name: Generate CycloneDX SBOM (JSON)
 
 on: push
 
-permissions:
-  contents: read
-
 jobs:
-  Install:
-    name: Install Dependencies and Generate SBOM
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6.0.0
         with:
-          sparse-checkout: |
-            .node-version
-            package-lock.json
-            package.json
-          sparse-checkout-cone-mode: false
+          node-version: '20'
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version-file: .node-version
-          registry-url: https://registry.npmjs.org
-          package-manager-cache: false
+      - name: Install dependencies
+        run: npm install
 
-      - uses: actions/cache@v4
-        id: cache-node_modules
-        with:
-          path: node_modules
-          key: node-modules-ubuntu-latest-${{ hashFiles('package-lock.json') }}
-
-      - if: steps.cache-node_modules.outputs.cache-hit != 'true'
-        run: npm ci --ignore-scripts
-
-      - name: Install CycloneDX SBOM generator
+      - name: Install SBOM generator
         run: npm install --save-dev cyclonedx-node-npm
 
       - name: Generate CycloneDX SBOM (JSON)
         run: npx cyclonedx-node-npm --output sbom.json --json
-
-      - name: Upload SBOM Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: SBOM-JSON
-          path: sbom.json
