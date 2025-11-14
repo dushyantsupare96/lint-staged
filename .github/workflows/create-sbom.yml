@@ -21,4 +21,4 @@ jobs:
         run: npm install --save-dev @cyclonedx/cyclonedx-npm
 
       - name: Generate CycloneDX SBOM (JSON)
-        run: npx @cyclonedx/cyclonedx-npm --package.json
+        run: npx @cyclonedx/cyclonedx-npm --help
